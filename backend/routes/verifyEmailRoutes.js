@@ -1,6 +1,9 @@
 const express = require("express");
 const User = require("../db/User");
 
+const dotenv = require("dotenv");
+dotenv.config();
+
 const router = express.Router();
 
 router.get("/verify-email", async (req, res) => {

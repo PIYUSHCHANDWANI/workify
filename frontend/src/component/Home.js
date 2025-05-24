@@ -15,6 +15,11 @@ import {
   FormGroup,
   MenuItem,
   Checkbox,
+  Card,
+  CardContent,
+  Box,
+  Container,
+  Divider,
 } from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
 import Pagination from "@material-ui/lab/Pagination";
@@ -23,6 +28,13 @@ import SearchIcon from "@material-ui/icons/Search";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
+import BusinessIcon from "@material-ui/icons/Business";
+import LocationOnIcon from "@material-ui/icons/LocationOn";
+import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
+import TimerIcon from "@material-ui/icons/Timer";
+import CodeIcon from "@material-ui/icons/Code";
+import BrushIcon from "@material-ui/icons/Brush";
+import TrendingUpIcon from "@material-ui/icons/TrendingUp";
 
 import { SetPopupContext } from "../App";
 
@@ -48,6 +60,255 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+  },
+  searchBox: {
+    padding: theme.spacing(3),
+    marginBottom: theme.spacing(3),
+    backgroundColor: theme.palette.background.paper,
+    borderRadius: theme.shape.borderRadius,
+    boxShadow: theme.shadows[1],
+  },
+  searchInput: {
+    width: "100%",
+    marginBottom: theme.spacing(2),
+  },
+  filterButton: {
+    width: "100%",
+  },
+  jobCard: {
+    marginBottom: theme.spacing(2),
+    transition: "transform 0.2s",
+    "&:hover": {
+      transform: "translateY(-4px)",
+      boxShadow: theme.shadows[4],
+    },
+  },
+  jobTitle: {
+    fontWeight: 600,
+    marginBottom: theme.spacing(1),
+    color: theme.palette.primary.main,
+  },
+  jobInfo: {
+    display: "flex",
+    alignItems: "center",
+    marginBottom: theme.spacing(0.5),
+    color: theme.palette.text.secondary,
+    "& svg": {
+      marginRight: theme.spacing(1),
+      fontSize: "1.2rem",
+    },
+  },
+  skillChip: {
+    margin: theme.spacing(0.5),
+    backgroundColor: theme.palette.background.default,
+    color: theme.palette.text.primary,
+    borderRadius: theme.shape.borderRadius,
+  },
+  applyButton: {
+    marginTop: theme.spacing(2),
+  },
+  filterModal: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  filterPaper: {
+    backgroundColor: theme.palette.background.paper,
+    padding: theme.spacing(4),
+    borderRadius: theme.shape.borderRadius,
+    maxWidth: 500,
+    width: "90%",
+  },
+  sortGroup: {
+    border: `1px solid ${theme.palette.divider}`,
+    borderRadius: theme.shape.borderRadius,
+    padding: theme.spacing(2),
+    marginBottom: theme.spacing(2),
+  },
+  paginationContainer: {
+    display: "flex",
+    justifyContent: "center",
+    marginTop: theme.spacing(4),
+  },
+  header: {
+    background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
+    padding: theme.spacing(6, 0),
+    marginBottom: theme.spacing(4),
+    color: theme.palette.primary.contrastText,
+  },
+  statsContainer: {
+    marginBottom: theme.spacing(6),
+  },
+  statCard: {
+    padding: theme.spacing(3),
+    textAlign: 'center',
+    background: 'rgba(255, 255, 255, 0.9)',
+    backdropFilter: 'blur(10px)',
+    borderRadius: theme.shape.borderRadius,
+    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
+  },
+  statValue: {
+    fontSize: '2.5rem',
+    fontWeight: 700,
+    color: theme.palette.primary.main,
+    marginBottom: theme.spacing(1),
+  },
+  statLabel: {
+    color: theme.palette.text.secondary,
+    fontSize: '1rem',
+    fontWeight: 500,
+  },
+  categorySection: {
+    marginBottom: theme.spacing(6),
+  },
+  categoryCard: {
+    padding: theme.spacing(3),
+    textAlign: 'center',
+    cursor: 'pointer',
+    transition: 'all 0.3s ease',
+    '&:hover': {
+      transform: 'translateY(-8px)',
+    },
+  },
+  categoryIcon: {
+    fontSize: '2.5rem',
+    marginBottom: theme.spacing(2),
+    color: theme.palette.primary.main,
+  },
+  searchSection: {
+    marginBottom: theme.spacing(6),
+    position: 'relative',
+    '&::before': {
+      content: '""',
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      background: `linear-gradient(135deg, ${theme.palette.primary.light} 0%, ${theme.palette.secondary.light} 100%)`,
+      opacity: 0.1,
+      borderRadius: theme.shape.borderRadius,
+    },
+  },
+  featuredSection: {
+    marginBottom: theme.spacing(8),
+    position: 'relative',
+    '&::before': {
+      content: '""',
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      height: '50%',
+      background: `linear-gradient(135deg, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.main} 100%)`,
+      opacity: 0.05,
+      borderRadius: theme.shape.borderRadius,
+    },
+  },
+  sectionTitle: {
+    position: 'relative',
+    '&::after': {
+      content: '""',
+      position: 'absolute',
+      bottom: -8,
+      left: '50%',
+      transform: 'translateX(-50%)',
+      width: 60,
+      height: 4,
+      background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+      borderRadius: 2,
+    },
+  },
+  testimonialCard: {
+    padding: theme.spacing(4),
+    height: '100%',
+    position: 'relative',
+    overflow: 'visible',
+    '&::before': {
+      content: '"""',
+      position: 'absolute',
+      top: -20,
+      left: 20,
+      fontSize: '4rem',
+      color: theme.palette.primary.main,
+      opacity: 0.1,
+      fontFamily: 'serif',
+    },
+  },
+  testimonialAvatar: {
+    width: 64,
+    height: 64,
+    marginBottom: theme.spacing(2),
+    border: `3px solid ${theme.palette.background.paper}`,
+    boxShadow: theme.shadows[3],
+  },
+  companyLogosSection: {
+    background: theme.palette.background.default,
+    padding: theme.spacing(6, 0),
+    marginBottom: theme.spacing(8),
+  },
+  companyLogo: {
+    height: 40,
+    opacity: 0.7,
+    transition: 'all 0.3s ease',
+    filter: 'grayscale(100%)',
+    '&:hover': {
+      opacity: 1,
+      filter: 'grayscale(0%)',
+      transform: 'scale(1.1)',
+    },
+  },
+  statsCard: {
+    ...theme.statsCard,
+    position: 'relative',
+    overflow: 'hidden',
+    '&::after': {
+      content: '""',
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      background: `linear-gradient(135deg, ${theme.palette.primary.main}15 0%, ${theme.palette.secondary.main}15 100%)`,
+      opacity: 0.1,
+    },
+  },
+  categoryCard: {
+    ...theme.categoryCard,
+    position: 'relative',
+    overflow: 'hidden',
+    '&::before': {
+      content: '""',
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
+      background: `linear-gradient(135deg, ${theme.palette.primary.light}10 0%, ${theme.palette.primary.main}10 100%)`,
+      transition: 'transform 0.3s ease',
+      transform: 'translateY(100%)',
+    },
+    '&:hover::before': {
+      transform: 'translateY(0)',
+    },
+  },
+  jobCard: {
+    ...theme.jobCard,
+    position: 'relative',
+    '&::after': {
+      content: '""',
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      height: 4,
+      background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+      opacity: 0,
+      transition: 'opacity 0.3s ease',
+    },
+    '&:hover::after': {
+      opacity: 1,
+    },
   },
 }));
 
@@ -101,45 +362,54 @@ const JobTile = (props) => {
   const deadline = new Date(job.deadline).toLocaleDateString();
 
   return (
-    <Paper className={classes.jobTileOuter} elevation={3}>
-      <Grid container>
-        <Grid container item xs={9} spacing={1} direction="column">
-          <Grid item>
-            <Typography variant="h5">{job.title}</Typography>
-          </Grid>
-          <Grid item>
-            <Rating value={job.rating !== -1 ? job.rating : null} readOnly />
-          </Grid>
-          <Grid item>Role : {job.jobType}</Grid>
-          <Grid item>Salary : &#8377; {job.salary} per month</Grid>
-          <Grid item>
-            Duration :{" "}
-            {job.duration !== 0 ? `${job.duration} month` : `Flexible`}
-          </Grid>
-          <Grid item>Posted By : {job.recruiter.name}</Grid>
-          <Grid item>Application Deadline : {deadline}</Grid>
-
-          <Grid item>
-            {job.skillsets.map((skill) => (
-              <Chip label={skill} style={{ marginRight: "2px" }} />
-            ))}
-          </Grid>
-        </Grid>
-        <Grid item xs={3}>
-          <Button
-            variant="contained"
-            style={{backgroundColor: "green", color:"white"}}
-
-            className={classes.button}
-            onClick={() => {
-              setOpen(true);
-            }}
-            disabled={userType() === "recruiter"}
-          >
-            Apply
-          </Button>
-        </Grid>
-      </Grid>
+    <Card className={classes.jobCard}>
+      <CardContent>
+        <Typography variant="h6" className={classes.jobTitle}>
+          {job.title}
+        </Typography>
+        <Box mb={2}>
+          <Rating value={job.rating !== -1 ? job.rating : null} readOnly precision={0.5} />
+        </Box>
+        <div className={classes.jobInfo}>
+          <BusinessIcon />
+          <Typography>{job.recruiter.name}</Typography>
+        </div>
+        <div className={classes.jobInfo}>
+          <MonetizationOnIcon />
+          <Typography>₹ {job.salary} per month</Typography>
+        </div>
+        <div className={classes.jobInfo}>
+          <TimerIcon />
+          <Typography>
+            Duration: {job.duration !== 0 ? `${job.duration} month` : "Flexible"}
+          </Typography>
+        </div>
+        <div className={classes.jobInfo}>
+          <LocationOnIcon />
+          <Typography>Deadline: {deadline}</Typography>
+        </div>
+        <Divider style={{ margin: "16px 0" }} />
+        <Typography variant="subtitle2" gutterBottom>
+          Required Skills:
+        </Typography>
+        <div>
+          {job.skillsets.map((skill) => (
+            <Chip key={skill} label={skill} className={classes.skillChip} />
+          ))}
+        </div>
+        <Button
+          variant="contained"
+          color="primary"
+          fullWidth
+          className={classes.applyButton}
+          onClick={() => {
+            setOpen(true);
+          }}
+          disabled={userType() === "recruiter"}
+        >
+          Apply Now
+        </Button>
+      </CardContent>
       <Modal open={open} onClose={handleClose} className={classes.popupDialog}>
         <Paper
           style={{
@@ -178,7 +448,7 @@ const JobTile = (props) => {
           </Button>
         </Paper>
       </Modal>
-    </Paper>
+    </Card>
   );
 };
 
@@ -622,83 +892,215 @@ const Home = (props) => {
       });
   };
 
+  const classes = useStyles();
+
   return (
     <>
-      <Grid
-        container
-        item
-        direction="column"
-        alignItems="center"
-        style={{ padding: "30px", minHeight: "93vh" }}
-      >
-        <Grid
-          item
-          container
-          direction="column"
-          justify="center"
-          alignItems="center"
-        >
-          <Grid item xs>
-            <Typography variant="h2">Jobs</Typography>
+      <Box className={classes.header}>
+        <Container maxWidth="lg">
+          <Grid container spacing={4} className={classes.statsContainer}>
+            <Grid item xs={12} sm={4}>
+              <Paper className={classes.statCard}>
+                <Typography className={classes.statValue}>{jobs.length}</Typography>
+                <Typography className={classes.statLabel}>Active Jobs</Typography>
+              </Paper>
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <Paper className={classes.statCard}>
+                <Typography className={classes.statValue}>50+</Typography>
+                <Typography className={classes.statLabel}>Companies</Typography>
+              </Paper>
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <Paper className={classes.statCard}>
+                <Typography className={classes.statValue}>1000+</Typography>
+                <Typography className={classes.statLabel}>Job Seekers</Typography>
+              </Paper>
+            </Grid>
           </Grid>
-          <Grid item xs>
-            <TextField
-              label="Search Jobs"
-              value={searchOptions.query}
-              onChange={(event) =>
-                setSearchOptions({
-                  ...searchOptions,
-                  query: event.target.value,
-                })
-              }
-              onKeyPress={(ev) => {
-                if (ev.key === "Enter") {
-                  getData();
-                }
-              }}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment>
-                    <IconButton onClick={() => getData()}>
-                      <SearchIcon />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-              style={{ width: "500px" }}
-              variant="outlined"
-            />
-          </Grid>
-          <Grid item>
-            <IconButton onClick={() => setFilterOpen(true)}>
-              <FilterListIcon />
-            </IconButton>
-          </Grid>
-        </Grid>
+        </Container>
+      </Box>
 
-        <Grid
-          container
-          item
-          xs
-          direction="column"
-          alignItems="stretch"
-          justify="center"
-        >
-          {jobs.length > 0 ? (
-            jobs.map((job) => {
-              return <JobTile job={job} />;
-            })
-          ) : (
-            <Typography variant="h5" style={{ textAlign: "center" }}>
-              No jobs found
-            </Typography>
-          )}
-        </Grid>
-        {/* <Grid item>
-          <Pagination count={10} style={{backgroundColor: "green", color:"white"}}
- />
-        </Grid> */}
-      </Grid>
+      <Container maxWidth="lg">
+        <Box className={classes.searchSection} py={4}>
+          <Grid container spacing={2} alignItems="center" justify="center">
+            <Grid item xs={12} md={8}>
+              <TextField
+                label="Search Jobs"
+                value={searchOptions.query}
+                onChange={(event) =>
+                  setSearchOptions({
+                    ...searchOptions,
+                    query: event.target.value,
+                  })
+                }
+                onKeyPress={(ev) => {
+                  if (ev.key === "Enter") {
+                    getData();
+                  }
+                }}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon color="primary" />
+                    </InputAdornment>
+                  ),
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={() => getData()}>
+                        <SearchIcon />
+                      </IconButton>
+                      <IconButton onClick={() => setFilterOpen(true)}>
+                        <FilterListIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+                fullWidth
+                variant="outlined"
+                placeholder="Search by job title, company, or skills..."
+              />
+            </Grid>
+          </Grid>
+        </Box>
+
+        <Box className={classes.featuredSection}>
+          <Typography variant="h4" align="center" gutterBottom className={classes.sectionTitle}>
+            Featured Jobs
+          </Typography>
+          <Typography variant="subtitle1" align="center" color="textSecondary" paragraph>
+            Discover your next career opportunity
+          </Typography>
+          <Grid container spacing={3} style={{ marginTop: '2rem' }}>
+            {jobs.slice(0, 3).map((job) => (
+              <Grid item xs={12} md={4} key={job._id}>
+                <JobTile job={job} featured />
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
+
+        <Box className={classes.companyLogosSection}>
+          <Typography variant="h6" align="center" gutterBottom color="textSecondary">
+            Trusted by leading companies
+          </Typography>
+          <Grid container spacing={4} justify="center" alignItems="center">
+            {['Google', 'Microsoft', 'Amazon', 'Apple', 'Meta'].map((company) => (
+              <Grid item key={company}>
+                <Typography variant="h6" className={classes.companyLogo}>
+                  {company}
+                </Typography>
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
+
+        <Box className={classes.categorySection}>
+          <Typography variant="h5" gutterBottom align="center" style={{ marginBottom: '2rem' }}>
+            Popular Job Categories
+          </Typography>
+          <Grid container spacing={4}>
+            {[
+              { icon: <BusinessIcon className={classes.categoryIcon} />, title: "Business", count: "150+" },
+              { icon: <CodeIcon className={classes.categoryIcon} />, title: "Technology", count: "200+" },
+              { icon: <BrushIcon className={classes.categoryIcon} />, title: "Design", count: "100+" },
+              { icon: <TrendingUpIcon className={classes.categoryIcon} />, title: "Marketing", count: "80+" },
+            ].map((category) => (
+              <Grid item xs={12} sm={6} md={3} key={category.title}>
+                <Paper className={classes.categoryCard}>
+                  {category.icon}
+                  <Typography variant="h6" gutterBottom>
+                    {category.title}
+                  </Typography>
+                  <Typography color="textSecondary">
+                    {category.count} jobs
+                  </Typography>
+                </Paper>
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
+
+        <Box mb={8}>
+          <Typography variant="h4" align="center" gutterBottom className={classes.sectionTitle}>
+            Success Stories
+          </Typography>
+          <Typography variant="subtitle1" align="center" color="textSecondary" paragraph>
+            Hear from our happy job seekers
+          </Typography>
+          <Grid container spacing={4} style={{ marginTop: '2rem' }}>
+            {[
+              {
+                name: 'John Doe',
+                role: 'Software Engineer at Google',
+                text: 'Found my dream job through this platform. The process was smooth and efficient.',
+              },
+              {
+                name: 'Jane Smith',
+                role: 'UI/UX Designer at Apple',
+                text: 'Great platform for creative professionals. Highly recommended!',
+              },
+              {
+                name: 'Mike Johnson',
+                role: 'Product Manager at Amazon',
+                text: 'The quality of job listings and employers is outstanding.',
+              },
+            ].map((testimonial) => (
+              <Grid item xs={12} md={4} key={testimonial.name}>
+                <Paper elevation={2} className={classes.testimonialCard}>
+                  <Typography variant="body1" paragraph style={{ fontStyle: 'italic' }}>
+                    "{testimonial.text}"
+                  </Typography>
+                  <Typography variant="subtitle1" gutterBottom>
+                    <strong>{testimonial.name}</strong>
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    {testimonial.role}
+                  </Typography>
+                </Paper>
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
+
+        <Box mb={8}>
+          <Typography variant="h4" align="center" gutterBottom className={classes.sectionTitle}>
+            Latest Jobs
+          </Typography>
+          <Grid container spacing={3}>
+            {jobs.length > 0 ? (
+              jobs.map((job) => (
+                <Grid item xs={12} md={6} lg={4} key={job._id}>
+                  <JobTile job={job} />
+                </Grid>
+              ))
+            ) : (
+              <Grid item xs={12}>
+                <Paper style={{ padding: '3rem', textAlign: 'center', background: 'rgba(0,0,0,0.02)' }}>
+                  <Typography variant="h5" gutterBottom>No jobs found</Typography>
+                  <Typography color="textSecondary">
+                    Try adjusting your search criteria or check back later for new opportunities
+                  </Typography>
+                </Paper>
+              </Grid>
+            )}
+          </Grid>
+        </Box>
+
+        {jobs.length > 0 && (
+          <Box className={classes.paginationContainer}>
+            <Pagination
+              count={10}
+              color="primary"
+              size="large"
+              style={{ marginTop: '2rem' }}
+              showFirstButton
+              showLastButton
+            />
+          </Box>
+        )}
+      </Container>
+
       <FilterPopup
         open={filterOpen}
         searchOptions={searchOptions}

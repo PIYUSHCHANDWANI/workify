@@ -7,35 +7,99 @@ import {
   Typography,
   makeStyles,
   Paper,
+  Container,
+  Box,
+  Divider,
 } from "@material-ui/core";
 import axios from "axios";
-import { Redirect } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
+import PersonIcon from "@material-ui/icons/Person";
 
 import PasswordInput from "../lib/PasswordInput";
 import EmailInput from "../lib/EmailInput";
 import { SetPopupContext } from "../App";
-
 import apiList from "../lib/apiList";
 import isAuth from "../lib/isAuth";
 
 const useStyles = makeStyles((theme) => ({
-  body: {
-    padding: "60px 60px",
+  container: {
+    minHeight: "93vh",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: theme.spacing(3),
   },
-  inputBox: {
-    width: "300px",
+  paper: {
+    padding: theme.spacing(4),
+    maxWidth: "450px",
+    width: "100%",
+    backgroundColor: theme.palette.background.paper,
+    borderRadius: theme.shape.borderRadius,
+    boxShadow: theme.shadows[3],
+  },
+  logo: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: theme.spacing(4),
+    "& svg": {
+      fontSize: "3rem",
+      color: theme.palette.primary.main,
+      marginRight: theme.spacing(2),
+    },
+  },
+  form: {
+    width: "100%",
+  },
+  inputField: {
+    marginBottom: theme.spacing(2),
   },
   submitButton: {
-    width: "300px",
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2),
+    height: "46px",
+  },
+  dividerContainer: {
+    display: "flex",
+    alignItems: "center",
+    marginTop: theme.spacing(3),
+    marginBottom: theme.spacing(3),
+  },
+  divider: {
+    flexGrow: 1,
+  },
+  dividerText: {
+    margin: theme.spacing(0, 2),
+    color: theme.palette.text.secondary,
+  },
+  googleButton: {
+    backgroundColor: "#DB4437",
+    color: "white",
+    "&:hover": {
+      backgroundColor: "#B33225",
+    },
+    height: "46px",
+  },
+  signupPrompt: {
+    textAlign: "center",
+    marginTop: theme.spacing(2),
+  },
+  signupLink: {
+    color: theme.palette.primary.main,
+    cursor: "pointer",
+    fontWeight: 500,
+    "&:hover": {
+      textDecoration: "underline",
+    },
   },
 }));
 
-const Login = (props) => {
+const Login = () => {
   const classes = useStyles();
   const setPopup = useContext(SetPopupContext);
+  const history = useHistory();
 
   const [loggedin, setLoggedin] = useState(isAuth());
-
   const [loginDetails, setLoginDetails] = useState({
     email: "",
     password: "",
@@ -107,61 +171,72 @@ const Login = (props) => {
   return loggedin ? (
     <Redirect to="/" />
   ) : (
-    <Paper elevation={3} className={classes.body}>
-      <Grid container direction="column" spacing={4} alignItems="center">
-        <Grid item>
-          <Typography variant="h3" component="h2">
-            Login
+    <Container className={classes.container}>
+      <Paper elevation={3} className={classes.paper}>
+        <div className={classes.logo}>
+          <PersonIcon />
+          <Typography variant="h4" component="h1">
+            Welcome Back
           </Typography>
-        </Grid>
-        <Grid item>
+        </div>
+        <form className={classes.form} noValidate>
           <EmailInput
-            label="Email"
+            label="Email Address"
             value={loginDetails.email}
             onChange={(event) => handleInput("email", event.target.value)}
             inputErrorHandler={inputErrorHandler}
             handleInputError={handleInputError}
-            className={classes.inputBox}
+            className={classes.inputField}
+            required
           />
-        </Grid>
-        <Grid item>
           <PasswordInput
             label="Password"
             value={loginDetails.password}
             onChange={(event) => handleInput("password", event.target.value)}
-            className={classes.inputBox}
+            className={classes.inputField}
           />
-        </Grid>
-        <Grid item>
           <Button
             variant="contained"
-            style={{backgroundColor: "green", color:"white"}}
-
-            onClick={() => handleLogin()}
+            color="primary"
+            fullWidth
             className={classes.submitButton}
+            onClick={() => handleLogin()}
           >
             Login
           </Button>
-        </Grid>
 
-        {/* <div style={{ alignItems: "center", justifyContent: "center" }}>
-          <h5>OR</h5>
-        </div>
+          <div className={classes.dividerContainer}>
+            <Divider className={classes.divider} />
+            <Typography variant="body2" className={classes.dividerText}>
+              OR
+            </Typography>
+            <Divider className={classes.divider} />
+          </div>
 
-        <Grid item>
           <Button
             variant="contained"
-            style={{ backgroundColor: "red" }}
+            fullWidth
+            className={classes.googleButton}
+            startIcon={<FaGoogle />}
             onClick={() =>
               (window.location.href = "http://localhost:4444/auth/google")
             }
           >
-            <FaGoogle />
             Sign in with Google
           </Button>
-        </Grid> */}
-      </Grid>
-    </Paper>
+
+          <Typography variant="body2" className={classes.signupPrompt}>
+            Don't have an account?{" "}
+            <span
+              className={classes.signupLink}
+              onClick={() => history.push("/signup")}
+            >
+              Sign up
+            </span>
+          </Typography>
+        </form>
+      </Paper>
+    </Container>
   );
 };
 

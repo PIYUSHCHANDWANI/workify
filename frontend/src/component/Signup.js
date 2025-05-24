@@ -26,14 +26,106 @@ import apiList from "../lib/apiList";
 import isAuth from "../lib/isAuth";
 
 const useStyles = makeStyles((theme) => ({
-  body: {
-    padding: "60px 60px",
+  container: {
+    minHeight: "93vh",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: theme.spacing(3),
+    background: `linear-gradient(135deg, ${theme.palette.primary.light}15 0%, ${theme.palette.secondary.light}15 100%)`,
+  },
+  paper: {
+    padding: theme.spacing(4),
+    maxWidth: "800px",
+    width: "100%",
+    backgroundColor: theme.palette.background.paper,
+    borderRadius: theme.shape.borderRadius * 2,
+    boxShadow: "0 8px 40px rgba(0,0,0,0.12)",
+  },
+  form: {
+    width: "100%",
   },
   inputBox: {
-    width: "400px",
+    width: "100%",
+    marginBottom: theme.spacing(2),
   },
   submitButton: {
-    width: "400px",
+    width: "100%",
+    height: "48px",
+    marginTop: theme.spacing(2),
+    background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
+    transition: "all 0.3s ease",
+    "&:hover": {
+      transform: "translateY(-2px)",
+      boxShadow: "0 6px 20px rgba(0,0,0,0.15)",
+    },
+  },
+  title: {
+    marginBottom: theme.spacing(4),
+    textAlign: "center",
+    color: theme.palette.primary.main,
+    "& h4": {
+      fontWeight: 700,
+    },
+  },
+  userTypeContainer: {
+    marginBottom: theme.spacing(4),
+    display: "flex",
+    justifyContent: "center",
+    gap: theme.spacing(2),
+  },
+  userTypeButton: {
+    padding: theme.spacing(2, 4),
+    borderRadius: theme.shape.borderRadius,
+    border: `2px solid ${theme.palette.divider}`,
+    transition: "all 0.3s ease",
+    "&.active": {
+      borderColor: theme.palette.primary.main,
+      backgroundColor: theme.palette.primary.main + "10",
+    },
+  },
+  sectionTitle: {
+    marginBottom: theme.spacing(2),
+    color: theme.palette.text.secondary,
+    fontWeight: 600,
+  },
+  chipInput: {
+    marginBottom: theme.spacing(2),
+    "& .MuiChip-root": {
+      backgroundColor: theme.palette.primary.main + "20",
+      color: theme.palette.primary.main,
+      fontWeight: 500,
+    },
+  },
+  fileUpload: {
+    marginBottom: theme.spacing(2),
+    "& .MuiPaper-root": {
+      transition: "all 0.3s ease",
+      "&:hover": {
+        transform: "translateY(-2px)",
+        boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
+      },
+    },
+  },
+  phoneInput: {
+    width: "100%",
+    marginBottom: theme.spacing(2),
+    "& .special-label": {
+      backgroundColor: theme.palette.background.paper,
+    },
+    "& .form-control": {
+      width: "100%",
+      height: "56px",
+      borderRadius: theme.shape.borderRadius,
+      fontSize: "16px",
+      "&:hover": {
+        borderColor: theme.palette.primary.main,
+      },
+      "&:focus": {
+        borderColor: theme.palette.primary.main,
+        boxShadow: `0 0 0 1px ${theme.palette.primary.main}`,
+      },
+    },
   },
 }));
 
@@ -114,7 +206,7 @@ const MultifieldInput = (props) => {
   );
 };
 
-const Login = (props) => {  // Renamed from Login to Signup for clarity
+const Signup = (props) => {
   const classes = useStyles();
   const setPopup = useContext(SetPopupContext);
   const history = useHistory(); // initialize history hook
@@ -319,158 +411,196 @@ const Login = (props) => {  // Renamed from Login to Signup for clarity
   return loggedin ? (
     <Redirect to="/" />
   ) : (
-    <Paper elevation={3} className={classes.body}>
-      <Grid container direction="column" spacing={4} alignItems="center">
-        <Grid item>
-          <Typography variant="h3" component="h2">
-            Signup
+    <div className={classes.container}>
+      <Paper elevation={0} className={classes.paper}>
+        <div className={classes.title}>
+          <Typography variant="h4" gutterBottom>
+            Create Your Account
           </Typography>
-        </Grid>
-        <Grid item>
-          <TextField
-            select
-            label="Category"
-            variant="outlined"
-            className={classes.inputBox}
-            value={signupDetails.type}
-            onChange={(event) => {
-              handleInput("type", event.target.value);
-            }}
+          <Typography variant="body1" color="textSecondary">
+            Join our community and start your journey
+          </Typography>
+        </div>
+
+        <div className={classes.userTypeContainer}>
+          <Button
+            className={`${classes.userTypeButton} ${
+              signupDetails.type === "applicant" ? "active" : ""
+            }`}
+            onClick={() => handleInput("type", "applicant")}
           >
-            <MenuItem value="applicant">Applicant</MenuItem>
-            <MenuItem value="recruiter">Recruiter</MenuItem>
-          </TextField>
-        </Grid>
-        <Grid item>
-          <TextField
-            label="Name"
-            value={signupDetails.name}
-            onChange={(event) => handleInput("name", event.target.value)}
-            className={classes.inputBox}
-            error={inputErrorHandler.name.error}
-            helperText={inputErrorHandler.name.message}
-            onBlur={(event) => {
-              if (event.target.value === "") {
-                handleInputError("name", true, "Name is required");
-              } else {
-                handleInputError("name", false, "");
-              }
-            }}
-            variant="outlined"
-          />
-        </Grid>
-        <Grid item>
-          <EmailInput
-            label="Email"
-            value={signupDetails.email}
-            onChange={(event) => handleInput("email", event.target.value)}
-            inputErrorHandler={inputErrorHandler}
-            handleInputError={handleInputError}
-            className={classes.inputBox}
-            required={true}
-          />
-        </Grid>
-        <Grid item>
-          <PasswordInput
-            label="Password"
-            value={signupDetails.password}
-            onChange={(event) => handleInput("password", event.target.value)}
-            className={classes.inputBox}
-            error={inputErrorHandler.password.error}
-            helperText={inputErrorHandler.password.message}
-            onBlur={(event) => {
-              if (event.target.value === "") {
-                handleInputError("password", true, "Password is required");
-              } else {
-                handleInputError("password", false, "");
-              }
-            }}
-          />
-        </Grid>
-        {signupDetails.type === "applicant" ? (
-          <>
-            {/* MultifieldInput for education */}
-            <MultifieldInput education={education} setEducation={setEducation} />
-            <Grid item>
-              <ChipInput
-                className={classes.inputBox}
-                label="Skills"
-                variant="outlined"
-                helperText="Press enter to add skills"
-                onChange={(chips) =>
-                  setSignupDetails({ ...signupDetails, skills: chips })
-                }
-              />
-            </Grid>
-            <Grid item>
-              <FileUploadInput
-                className={classes.inputBox}
-                label="Resume (image)"
-                icon={<DescriptionIcon />}
-                uploadTo={apiList.uploadResume}
-                handleInput={handleInput}
-                identifier={"resume"}
-              />
-            </Grid>
-            <Grid item>
-              <FileUploadInput
-                className={classes.inputBox}
-                label="Profile Photo (.jpg/.png)"
-                icon={<FaceIcon />}
-                uploadTo={apiList.uploadProfileImage}
-                handleInput={handleInput}
-                identifier={"profile"}
-              />
-            </Grid>
-          </>
-        ) : (
-          <>
-            <Grid item style={{ width: "100%" }}>
+            <Typography variant="subtitle1">Job Seeker</Typography>
+          </Button>
+          <Button
+            className={`${classes.userTypeButton} ${
+              signupDetails.type === "recruiter" ? "active" : ""
+            }`}
+            onClick={() => handleInput("type", "recruiter")}
+          >
+            <Typography variant="subtitle1">Employer</Typography>
+          </Button>
+        </div>
+
+        <form className={classes.form} onSubmit={(e) => e.preventDefault()}>
+          <Grid container spacing={3}>
+            <Grid item xs={12} sm={6}>
               <TextField
-                label="Bio (upto 250 words)"
-                multiline
-                rows={8}
-                style={{ width: "100%" }}
+                label="Name"
+                value={signupDetails.name}
+                onChange={(event) => handleInput("name", event.target.value)}
+                className={classes.inputBox}
                 variant="outlined"
-                value={signupDetails.bio}
-                onChange={(event) => {
-                  if (
-                    event.target.value.split(" ").filter(function (n) {
-                      return n !== "";
-                    }).length <= 250
-                  ) {
-                    handleInput("bio", event.target.value);
+                fullWidth
+                error={inputErrorHandler.name.error}
+                helperText={inputErrorHandler.name.message}
+                onBlur={(event) => {
+                  if (event.target.value === "") {
+                    handleInputError("name", true, "Name is required");
+                  } else {
+                    handleInputError("name", false, "");
                   }
                 }}
               />
             </Grid>
-            <Grid item>
-              <PhoneInput
-                country={"in"}
-                value={phone}
-                onChange={(phone) => setPhone(phone)}
+            <Grid item xs={12} sm={6}>
+              <EmailInput
+                label="Email"
+                value={signupDetails.email}
+                onChange={(event) => handleInput("email", event.target.value)}
+                className={classes.inputBox}
+                inputErrorHandler={inputErrorHandler}
+                handleInputError={handleInputError}
+                required
               />
             </Grid>
-          </>
-        )}
-        <Grid item>
-          <Button
-            variant="contained"
-            style={{backgroundColor: "green", color:"white"}}
+            <Grid item xs={12}>
+              <PasswordInput
+                label="Password"
+                value={signupDetails.password}
+                onChange={(event) => handleInput("password", event.target.value)}
+                className={classes.inputBox}
+                error={inputErrorHandler.password.error}
+                helperText={inputErrorHandler.password.message}
+                onBlur={(event) => {
+                  if (event.target.value === "") {
+                    handleInputError("password", true, "Password is required");
+                  } else {
+                    handleInputError("password", false, "");
+                  }
+                }}
+              />
+            </Grid>
 
-            onClick={() => {
-              signupDetails.type === "applicant"
-                ? handleSignupApplicant()
-                : handleSignupRecruiter();
-            }}
-            className={classes.submitButton}
-          >
-            Signup
-          </Button>
-        </Grid>
-      </Grid>
-    </Paper>
+            {signupDetails.type === "applicant" ? (
+              <>
+                <Grid item xs={12}>
+                  <Typography variant="subtitle1" className={classes.sectionTitle}>
+                    Professional Information
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <MultifieldInput
+                    education={education}
+                    setEducation={setEducation}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <ChipInput
+                    className={`${classes.inputBox} ${classes.chipInput}`}
+                    label="Skills"
+                    variant="outlined"
+                    helperText="Press enter to add skills"
+                    onChange={(chips) =>
+                      setSignupDetails({ ...signupDetails, skills: chips })
+                    }
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <div className={classes.fileUpload}>
+                    <FileUploadInput
+                      className={classes.inputBox}
+                      label="Resume (PDF/DOC)"
+                      icon={<DescriptionIcon />}
+                      uploadTo={apiList.uploadResume}
+                      handleInput={handleInput}
+                      identifier={"resume"}
+                    />
+                  </div>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <div className={classes.fileUpload}>
+                    <FileUploadInput
+                      className={classes.inputBox}
+                      label="Profile Photo"
+                      icon={<FaceIcon />}
+                      uploadTo={apiList.uploadProfileImage}
+                      handleInput={handleInput}
+                      identifier={"profile"}
+                    />
+                  </div>
+                </Grid>
+              </>
+            ) : (
+              <>
+                <Grid item xs={12}>
+                  <Typography variant="subtitle1" className={classes.sectionTitle}>
+                    Company Information
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    label="Company Name"
+                    value={signupDetails.name}
+                    onChange={(event) => handleInput("name", event.target.value)}
+                    className={classes.inputBox}
+                    variant="outlined"
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <div className={classes.phoneInput}>
+                    <PhoneInput
+                      country={"in"}
+                      value={signupDetails.contactNumber}
+                      onChange={(phone) => handleInput("contactNumber", phone)}
+                    />
+                  </div>
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    label="Bio"
+                    value={signupDetails.bio}
+                    onChange={(event) => handleInput("bio", event.target.value)}
+                    className={classes.inputBox}
+                    variant="outlined"
+                    multiline
+                    rows={4}
+                    fullWidth
+                  />
+                </Grid>
+              </>
+            )}
+
+            <Grid item xs={12}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => {
+                  signupDetails.type === "applicant"
+                    ? handleSignupApplicant()
+                    : handleSignupRecruiter();
+                }}
+                className={classes.submitButton}
+              >
+                Sign Up
+              </Button>
+            </Grid>
+          </Grid>
+        </form>
+      </Paper>
+    </div>
   );
 };
 
-export default Login;
+export default Signup;
